@@ -1,2 +1,5 @@
-# HospitalMngtSystem
-I will be learning and applying my DB PostgreSQL knowledge in this project. We'll see the CRUD operations
+## HospitalMngtSystem
+#### Tech Stack :
+`1 - Python`<br>
+`2 - PostgreSQL`
+
