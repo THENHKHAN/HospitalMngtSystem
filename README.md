@@ -11,7 +11,7 @@ using Python Programming Language.
 
 ## Important INFO:
 ```
-1. Installing PostgreSql Server Database and PostgreSql-connector-python as psycopg2.
+1. Installing PostgreSql Database and PostgreSql-connector-python as psycopg2.
 2. Import the module and perform database connectivity
 3. Perform New Registration
 4. Display the list of options the user wants to select
@@ -35,7 +35,7 @@ try :
     conn = psycopg2.connect(database="Demo",
                             host="localhost",
                             user="postgres",
-                            password="test123",
+                            password="password",
                             port="5432")
 
 except Exception as error :
