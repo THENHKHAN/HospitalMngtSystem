@@ -7,6 +7,17 @@ class MyHospitalDB:
         print(f"userName : {username}")
         print(f"password : {password}")
 
+    def userLogin (self, userName, password):
+        [cursor, conn] = getCursor()
+        verifyUserNamePass = f"SELECT name FROM user_details WHERE name = '{userName}' and  password = '{password}'"
+        cursor.execute(verifyUserNamePass)
+        existingUserNamePass = cursor.fetchone()
+        if existingUserNamePass :
+            print("User verified!!!")
+            print("You are successfully Logged in!!!")
+        else:
+            print("Username or password is WRONG!! ")
+
     def userData(self, username, password):
         [cursor, conn] = getCursor()
         checkUsername = f"SELECT name FROM user_details WHERE name = '{username}' "  # this will get all name
