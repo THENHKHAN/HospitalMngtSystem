@@ -20,6 +20,16 @@ class Home:
 
         if (choice == 1):  # for Sign In
             print("Wao, you selected Sign In !")
+            print("""
+                         ==================================
+                         !!!!!!!!  {{Sign In}}  !!!!!!!!!!
+                         ==================================
+                """)
+            username = input("Plase enter your username : ")
+            password = input("Plase enter your password : ")
+            crudObj = MyHospitalDB()
+            crudObj.userLogin(username, password)
+
 
         elif (choice == 2):  # for Registration
             print("Wao, you selected Registration !")
