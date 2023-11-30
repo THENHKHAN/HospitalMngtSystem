@@ -3,6 +3,53 @@ from crudOperations import MyHospitalDB
 
 class Home:
 
+    def administration(self) :
+       print("""
+                1. Display the details
+                2. Add a new member
+                3. Delete a member
+                4. Make an exit
+                                         """)
+
+       a =  int(input("Enter your choice please!! : "))
+       # Display details
+       if a == 1:
+            print("""
+                    1. Doctors Details
+                    2. Nurse Details
+                    3. Others
+                                     """)
+            b = int(input("Enter your choice please!! : "))
+            # doctor details
+            if b == 1 :
+                crudObj = MyHospitalDB()
+                crudObj.showDetails("doctorDet")
+                print("Showed DOC DETAILS now exist \U0001f60A")
+                exit(1)
+        #  Add a new member
+       if a == 2: # will implement later
+            print("""
+                     1. Add Doctors
+                     2. Add Nurse
+                     3. Add Others
+                                      """)
+
+
+
+         # Delete a member
+       if a == 3:  # will implement later
+            print("""
+                     1. Delete Doctors 
+                     2. Delete Nurse 
+                     3. Delete Others
+                                      """)
+            b = int(input("Enter your choice please!! : "))
+
+
+        # Make an exit
+       if a == 4:  # will implement later
+           pass
+
     def userMenu(self):
 
         print('''
@@ -28,8 +75,28 @@ class Home:
             username = input("Plase enter your username : ")
             password = input("Plase enter your password : ")
             crudObj = MyHospitalDB()
-            crudObj.userLogin(username, password)
+            verified = crudObj.userLogin(username, password)
+            if verified :
+                print("You are successfully Logged in!!!")
+            while (True):
+                print("""
+                                1.Administration
+                                2.Patient(Details)
+                                3.Sign Out
 
+                                                            """)
+
+                a = int(input("ENTER YOUR CHOICE:"))
+
+                if a == 1:
+                    self.administration()
+
+                if a == 2:
+                    print("ttttttttttttttttttt")
+
+                if a == 3:
+                    print("Thank you for your time!! :\U0001f643")
+                    break
 
         elif (choice == 2):  # for Registration
             print("Wao, you selected Registration !")
