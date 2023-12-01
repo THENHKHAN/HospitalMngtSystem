@@ -12,6 +12,7 @@ class Home:
                                          """)
 
        a =  int(input("Enter your choice please!! : "))
+       crudObj = MyHospitalDB()
        # Display details
        if a == 1:
             print("""
@@ -22,9 +23,14 @@ class Home:
             b = int(input("Enter your choice please!! : "))
             # doctor details
             if b == 1 :
-                crudObj = MyHospitalDB()
                 crudObj.showDetails("doctorDet")
                 print("Showed DOC DETAILS now exist \U0001f60A")
+                exit(1) # later we remove  this and make continue
+
+            # Nurse details
+            elif b == 2 :
+                crudObj.showDetails("nurseDet")
+                print("Showed Nurse DETAILS now exist \U0001f60A")
                 exit(1)
         #  Add a new member
        if a == 2: # will implement later
@@ -78,25 +84,28 @@ class Home:
             verified = crudObj.userLogin(username, password)
             if verified :
                 print("You are successfully Logged in!!!")
-            while (True):
-                print("""
-                                1.Administration
-                                2.Patient(Details)
-                                3.Sign Out
+                while (True):
+                    print("""
+                                                   1.Administration
+                                                   2.Patient(Details)
+                                                   3.Sign Out
 
-                                                            """)
+                                                                               """)
 
-                a = int(input("ENTER YOUR CHOICE:"))
+                    a = int(input("ENTER YOUR CHOICE:"))
 
-                if a == 1:
-                    self.administration()
+                    if a == 1:
+                        self.administration()
 
-                if a == 2:
-                    print("ttttttttttttttttttt")
+                    if a == 2:
+                        print("ttttttttttttttttttt")
 
-                if a == 3:
-                    print("Thank you for your time!! :\U0001f643")
-                    break
+                    if a == 3:
+                        print("Thank you for your time!! :\U0001f643")
+                        break
+
+            else: # if username or password is wrong
+                exit(0)
 
         elif (choice == 2):  # for Registration
             print("Wao, you selected Registration !")
