@@ -21,17 +21,20 @@ class Home:
                     3. Others
                                      """)
             b = int(input("Enter your choice please!! : "))
+
             # doctor details
             if b == 1 :
                 crudObj.showDetails("doctorDet")
                 print("Showed DOC DETAILS now exist \U0001f60A")
                 exit(1) # later we remove  this and make continue
 
+
             # Nurse details
             elif b == 2 :
                 crudObj.showDetails("nurseDet")
                 print("Showed Nurse DETAILS now exist \U0001f60A")
                 exit(1)
+
         #  Add a new member
        if a == 2: # will implement later
             print("""
@@ -87,7 +90,7 @@ class Home:
                 while (True):
                     print("""
                                                    1.Administration
-                                                   2.Patient(Details)
+                                                   2.Patient
                                                    3.Sign Out
 
                                                                                """)
