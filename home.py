@@ -13,6 +13,7 @@ class Home:
 
        a =  int(input("Enter your choice please!! : "))
        crudObj = MyHospitalDB()
+
        # Display details
        if a == 1:
             print("""
@@ -36,31 +37,46 @@ class Home:
                 exit(1)
 
         #  Add a new member
-       if a == 2: # will implement later
+       if a == 2:
             print("""
                      1. Add Doctors
                      2. Add Nurse
                      3. Add Others
                                       """)
 
+            b = int(input("Enter your choice please!! : "))
+
+            if b == 1 :
+                    # enter doctor details
+                    # will ASK THE DETAILS new addDetails() function otherwise i would ask here then i have to send all th cred from here.
+                    crudObj.addDetails("doctor") # by this string in this function will identify to ask for doc or nurse
+
+            elif b == 2 :
+                    # enter nurse details
+                    # will ASK THE DETAILS
+                    crudObj.addDetails("nurse")
 
 
          # Delete a member
-       if a == 3:  # will implement later
+       elif a == 3:
             print("""
                      1. Delete Doctors 
                      2. Delete Nurse 
                      3. Delete Others
                                       """)
             b = int(input("Enter your choice please!! : "))
+            if b == 1 :
+                crudObj.deleteDetails("doctors")
 
+            elif b == 2 :
+                crudObj.deleteDetails("nurse")
 
         # Make an exit
        if a == 4:  # will implement later
            pass
 
     def userMenu(self):
-
+        crudObj = MyHospitalDB() # so that we don't have to make this object in each condition for calling its functions.
         print('''
                  ================================
                     Welcome To NHKHAN Hospital
@@ -83,7 +99,6 @@ class Home:
                 """)
             username = input("Plase enter your username : ")
             password = input("Plase enter your password : ")
-            crudObj = MyHospitalDB()
             verified = crudObj.userLogin(username, password)
             if verified :
                 print("You are successfully Logged in!!!")
@@ -119,8 +134,6 @@ class Home:
              ''')
             username = input("Input your username please !!: ")
             password = input("Input the password (Password must be strong!!! : ")
-
-            crudObj = MyHospitalDB()
             crudObj.showEnteredData(username, password)
             crudObj.userData(username, password)
 
