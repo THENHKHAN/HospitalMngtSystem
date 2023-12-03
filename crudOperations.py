@@ -53,7 +53,7 @@ class MyHospitalDB:
                 select_query)  # but if you will write directly inside execute() then always use '{}' i.e. under single quote
             allDoc = cursor.fetchall()
             print("Here are doctor details: ")
-            print("Total rows are:  ", len(allDoc))
+            print("Total rows In the Table are:  ", len(allDoc))
 
             # print("Printing each row")
             # for row in allDoc:
@@ -178,17 +178,37 @@ class MyHospitalDB:
                 conn.close()
                 cursor.close()
                 print("The Postgresql connection inside delete record is closed")
-        exit(1)
+
+
+    def updateDoctor(self, docTableName, userId, colName, data):
+        try:
+            cursor, conn = getCursor()
+            # Update single record now
+            updateQuery = f""" UPDATE {docTableName} 
+                                    SET {colName.lower()} = %s WHERE id = %s
+                            """
+            cursor.execute(updateQuery, (data, userId))
+            conn.commit()
+            count = cursor.rowcount
+            print(f"******* {count} Record Updated successfully *******  ")
+
+
+        except psycopg2.Error as error:
+            print(f"Failed to UPDATE data in table:{docTableName} ,", error)
+        finally:
+            if conn:
+                conn.close()
+                cursor.close()
+                print("The Postgresql connection inside Update record is closed")
+
 
 
     def showEnteredData(self, username, password):
         print(f"userName : {username}")
         print(f"password : {password}")
 
-
-
     # common show , add, delete and update functionality and then based on the user choice making for particular entity
-    def showDetails(self, doc, nurse, patient, others):
+    def showDetails(self, doc="", nurse="", patient="", others=""):
         if doc == "doctorDet":
             docTableName = "doctor_details"
             self.doctorDetails(docTableName)
@@ -226,6 +246,26 @@ class MyHospitalDB:
                   end=" ")  # id and username both are unique so we can anyone.username seems more intuitive
             d = input()
             self.deleteDoc(docTableName, d)
+
+        elif nurse == "nurse":
+            docTableName = "nurse_details"
+            print("Here are the Details of all Nurses: ")
+            self.nurseDetails(docTableName)
+
+    def updateDetails(self, doc="", nurse="", patient="", others=""):
+        if doc == "doctors":
+            docTableName = "doctor_details"
+            print("All Doctor * BEFORE UPDATE * : ")
+            self.doctorDetails(docTableName)
+            # print(" and the column name and update value (except ID): ", end=" ")  # id and username both are unique so we can anyone.username seems more intuitive
+            userId = input("Enter the Doctor's ID of which you want to Update: ")
+            colName = input("Enter the Column name that you want to update in : ")
+            data = input("Enter the value that you want to update: ")
+
+            self.updateDoctor(docTableName, userId, colName, data)
+
+            print("All Doctor * AFTER UPDATE * : ")
+            self.doctorDetails(docTableName)
 
         elif nurse == "nurse":
             docTableName = "nurse_details"
