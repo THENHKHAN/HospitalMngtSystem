@@ -16,15 +16,15 @@ using Python Programming Language.
 3. Perform New Registration
 4. Display the list of options the user wants to select
 5. Adding the data of the administration staff
-6. Deleting the details of the administration staff
+6. Updating and Deleting the details of the administration staff 
 7. Displaying the patient’s information and adding the new patients
 8. Discharge process of the patient and accounting of the bills
 ```
 ### Features and Benefits of Hospital Management System in Python
 Here as we are using PostgreSQL for database creation in Hospital Management, we are able to
-* Register new patient
+* Register new Staff/Patient
 * View the staff, patient information, discharge, and bill payment summary details.
-* Delete the details.
+* Update and Delete the details.
 * We can add, delete and modify and view the details of the doctors, nurses, and workers.
 
 ### DB Setup :
@@ -42,6 +42,7 @@ except Exception as error :
     print(error)
 
 cursor = conn.cursor()
+# Most importantly: ALWAYS make commit after executing query. Like this conn.commit()
 ```
 
 
