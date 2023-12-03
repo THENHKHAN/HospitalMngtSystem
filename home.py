@@ -4,76 +4,90 @@ from crudOperations import MyHospitalDB
 class Home:
 
     def administration(self) :
-       print("""
-                1. Display the details
-                2. Add a new member
-                3. Delete a member
-                4. Make an exit
-                                         """)
+               crudObj = MyHospitalDB()
+               print("""
+                        1. Display the details
+                        2. Add a new member
+                        3. Delete a member
+                        4. Update member details
+                        5. Make an exit
+                                                 """)
 
-       a =  int(input("Enter your choice please!! : "))
-       crudObj = MyHospitalDB()
+               a =  int(input("Enter your choice please!! : "))
 
-       # Display details
-       if a == 1:
-            print("""
-                    1. Doctors Details
-                    2. Nurse Details
-                    3. Others
-                                     """)
-            b = int(input("Enter your choice please!! : "))
+               # Display details
+               if a == 1:
+                    print("""
+                            1. Doctors Details
+                            2. Nurse Details
+                            3. Others
+                                             """)
+                    b = int(input("Enter your choice please!! : "))
 
-            # doctor details
-            if b == 1 :
-                crudObj.showDetails("doctorDet")
-                print("Showed DOC DETAILS now exist \U0001f60A")
-                exit(1) # later we remove  this and make continue
-
-
-            # Nurse details
-            elif b == 2 :
-                crudObj.showDetails("nurseDet")
-                print("Showed Nurse DETAILS now exist \U0001f60A")
-                exit(1)
-
-        #  Add a new member
-       if a == 2:
-            print("""
-                     1. Add Doctors
-                     2. Add Nurse
-                     3. Add Others
-                                      """)
-
-            b = int(input("Enter your choice please!! : "))
-
-            if b == 1 :
-                    # enter doctor details
-                    # will ASK THE DETAILS new addDetails() function otherwise i would ask here then i have to send all th cred from here.
-                    crudObj.addDetails("doctor") # by this string in this function will identify to ask for doc or nurse
-
-            elif b == 2 :
-                    # enter nurse details
-                    # will ASK THE DETAILS
-                    crudObj.addDetails("nurse")
+                    # doctor details
+                    if b == 1 :
+                        crudObj.showDetails("doctorDet")
+                        print("Showed DOC DETAILS now exist \U0001f60A")
+                        exit(1) # later we remove  this and make continue
 
 
-         # Delete a member
-       elif a == 3:
-            print("""
-                     1. Delete Doctors 
-                     2. Delete Nurse 
-                     3. Delete Others
-                                      """)
-            b = int(input("Enter your choice please!! : "))
-            if b == 1 :
-                crudObj.deleteDetails("doctors")
+                    # Nurse details
+                    elif b == 2 :
+                        crudObj.showDetails("nurseDet")
+                        print("Showed Nurse DETAILS now exist \U0001f60A")
+                        exit(1)
 
-            elif b == 2 :
-                crudObj.deleteDetails("nurse")
+                #  Add a new member
+               if a == 2:
+                    print("""
+                             1. Add Doctors
+                             2. Add Nurse
+                             3. Add Others
+                                              """)
 
-        # Make an exit
-       if a == 4:  # will implement later
-           pass
+                    b = int(input("Enter your choice please!! : "))
+
+                    if b == 1 :
+                            # enter doctor details
+                            # will ASK THE DETAILS new addDetails() function otherwise i would ask here then i have to send all th cred from here.
+                            crudObj.addDetails("doctor") # by this string in this function will identify to ask for doc or nurse
+
+                    elif b == 2 :
+                            # enter nurse details
+                            # will ASK THE DETAILS
+                            crudObj.addDetails("nurse")
+
+
+                 # Delete a member
+               elif a == 3:
+                    print("""
+                             1. Delete Doctors 
+                             2. Delete Nurse 
+                             3. Delete Others
+                                              """)
+                    b = int(input("Enter your choice please!! : "))
+                    if b == 1 :
+                        crudObj.deleteDetails("doctors")
+
+                    elif b == 2 :
+                        crudObj.deleteDetails("nurse")
+
+                # update member details
+               elif a == 4 :
+                   print("""
+                            1. Update Doctors 
+                            2. Update Nurse 
+                            3. Update Others
+                                             """)
+                   b = int(input("Enter your choice please!! : "))
+                   if b == 1: # for doctors
+                       crudObj.updateDetails("doctors")
+
+                   elif b == 2: # for nurses
+                       crudObj.updateDetails("nurse")
+                # Make an exit
+               if a == 5:
+                   exit()
 
     def userMenu(self):
         crudObj = MyHospitalDB() # so that we don't have to make this object in each condition for calling its functions.
