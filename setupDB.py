@@ -18,7 +18,7 @@ dbName = os.getenv("DATABASE")
 
 # Use the password as needed
 print("Password:", password)
-print("Password:", dbName)
+print("dbName:", dbName)
 
 def getCursor():
     try:

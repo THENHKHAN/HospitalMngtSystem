@@ -115,15 +115,15 @@ class MyHospitalDB:
                 cursor.close()
                 print("The Postgresql connection inside Show nurse details is closed")
 
-    def addDoctor(self, docTableName, docCred):
+    def addDoctor(self, docTableName, docCredList):
         # AllCOl: ['id', 'name', 'specialisation', 'age', 'address', 'contact', 'fee', 'monthly_salary']
         try:
             [name, spe, age, addr, cont, fees,
-             mSalary] = docCred  # unpacking list of creds so that i can insert all in table
+             mSalary] = docCredList  # unpacking list of creds so that i can insert all in table
             cursor, conn = getCursor()
             query = f"SELECT * FROM {docTableName}"  # doing to get all the columns name of table
             cursor.execute(query)
-            docDet = cursor.fetchall()
+            docDet = cursor.fetchall() # comes details into cursor
             column_names = [col[0] for col in
                             cursor.description]  # In order to work this, you have to execute above two line.
 
@@ -150,7 +150,37 @@ class MyHospitalDB:
                 conn.close()
                 cursor.close()
                 print("The Postgresql connection is closed")
-                forContinue = input("press any key to continue!!")
+                input("Press Enter key to continue!!")
+
+    def addNurse(self, nurseTableName, nurseCredList):
+        try:
+            [name, age, addr, cont, mSalary ] = nurseCredList
+            cursor, conn = getCursor()
+            getAllColNames = f'SELECT * FROM {nurseTableName}'
+            cursor.execute(getAllColNames)
+            nurseDet = cursor.fetchall() # does not need to store in any variable bcz we'll use cursor only.
+            column_names = [col[0] for col in cursor.description] # getting this table(nurse_details) columns name by using list comprehension
+            print(f"All Columns in {nurseTableName} : {column_names}")
+            print(column_names)
+            # exit(1)
+            insertDetsQuery = f""" INSERT INTO {nurseTableName} ( {column_names[1]}, {column_names[2]}, {column_names[3]}, {column_names[4]}, {column_names[5]})
+                                    VALUES ('{name}', '{age}', '{addr}', '{cont}', '{mSalary}')
+                            """
+
+            cursor.execute(insertDetsQuery)
+            conn.commit()
+            print(f"Data INSERTED SUCCESSFULLY in  table:{nurseTableName} ")
+
+        except psycopg2.Error as error:
+             print(f"Failed to INSERT data in table:{nurseTableName} ,", error)
+
+        finally:
+            if conn:
+                conn.close()
+                cursor.close()
+                print("The Postgresql connection is closed")
+                input("Press Enter key to continue!!")
+
 
     def deleteDoc(self, docTableName, userName):
         try:
@@ -215,7 +245,6 @@ class MyHospitalDB:
         elif nurse == "nurseDet":
             nurseTableName = "nurse_details"
             self.nurseDetails(nurseTableName)
-
     def addDetails(self, doc="", nurse="", patient="",
                    others=""):  # given default arg so that i can send from where this fun is getting a single arg according to the doc or nurse or other. and below in this function bodu i can verify what arg got passed in this function.
         if doc == "doctor":
@@ -227,15 +256,21 @@ class MyHospitalDB:
             addr = input("Enter the address:  ")
             cont = input("Enter Contact Details:  ")
             fees = input("Enter the fees:  ")
-            mSalary = input("Enter the Salary:  ")
-            docCred = [name, spe, age, addr, cont, fees, mSalary]
+            mSalary = input("Enter the monthly Salary:  ")
+            docCredList = [name, spe, age, addr, cont, fees, mSalary]
             docTableName = "doctor_details"
-            self.addDoctor(docTableName, docCred)
+            self.addDoctor(docTableName, docCredList)
 
 
         elif nurse == "nurse":
+            name = input("Enter the nurse's name:  ")
+            age = input("Enter the age:  ")
+            addr = input("Enter the address:  ")
+            cont = input("Enter Contact Details:  ")
+            mSalary = input("Enter the monthly Salary:  ")
+            nurseCredList = [name, age, addr, cont, mSalary]
             nurseTableName = "nurse_details"
-            self.addNurse(nurseTableName)
+            self.addNurse(nurseTableName, nurseCredList)
 
     def deleteDetails(self, doc="", nurse="", patient="", others=""):
         if doc == "doctors":
