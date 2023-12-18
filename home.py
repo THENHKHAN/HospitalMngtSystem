@@ -70,10 +70,10 @@ class Home:
                                                   """)
                 b = int(input("Enter your choice please!! : "))
                 if b == 1:
-                    crudObj.deleteDetails("doctors")
+                    crudObj.deleteDetails(doc="doctors")
 
                 elif b == 2:
-                    crudObj.deleteDetails("nurse")
+                    crudObj.deleteDetails(nurse="nurse")
 
             # update member details
             elif a == 4:

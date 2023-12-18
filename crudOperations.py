@@ -123,7 +123,7 @@ class MyHospitalDB:
             cursor, conn = getCursor()
             query = f"SELECT * FROM {docTableName}"  # doing to get all the columns name of table
             cursor.execute(query)
-            docDet = cursor.fetchall() # comes details into cursor
+            docDet = cursor.fetchall()  # comes details into cursor
             column_names = [col[0] for col in
                             cursor.description]  # In order to work this, you have to execute above two line.
 
@@ -154,12 +154,13 @@ class MyHospitalDB:
 
     def addNurse(self, nurseTableName, nurseCredList):
         try:
-            [name, age, addr, cont, mSalary ] = nurseCredList
+            [name, age, addr, cont, mSalary] = nurseCredList
             cursor, conn = getCursor()
             getAllColNames = f'SELECT * FROM {nurseTableName}'
             cursor.execute(getAllColNames)
-            nurseDet = cursor.fetchall() # does not need to store in any variable bcz we'll use cursor only.
-            column_names = [col[0] for col in cursor.description] # getting this table(nurse_details) columns name by using list comprehension
+            nurseDet = cursor.fetchall()  # does not need to store in any variable bcz we'll use cursor only.
+            column_names = [col[0] for col in
+                            cursor.description]  # getting this table(nurse_details) columns name by using list comprehension
             print(f"All Columns in {nurseTableName} : {column_names}")
             print(column_names)
             # exit(1)
@@ -172,7 +173,7 @@ class MyHospitalDB:
             print(f"Data INSERTED SUCCESSFULLY in  table:{nurseTableName} ")
 
         except psycopg2.Error as error:
-             print(f"Failed to INSERT data in table:{nurseTableName} ,", error)
+            print(f"Failed to INSERT data in table:{nurseTableName} ,", error)
 
         finally:
             if conn:
@@ -181,8 +182,8 @@ class MyHospitalDB:
                 print("The Postgresql connection is closed")
                 input("Press Enter key to continue!!")
 
-
     def deleteDoc(self, docTableName, userName):
+        cursor, conn = getCursor()
         try:
             cursor, conn = getCursor()
             # Using a parameterized query to prevent SQL injection
@@ -209,6 +210,27 @@ class MyHospitalDB:
                 cursor.close()
                 print("The Postgresql connection inside delete record is closed")
 
+    def deleteNurse(self, nurseTableName, nurseName):
+        cursor, conn = getCursor()
+        try:
+            query = f'''
+                        DELETE FROM {nurseTableName} WHERE name = %s ;
+                '''
+            cursor.execute(query, (nurseName,))
+            # Fetch the deleted record (if needed)
+            deleted_record = cursor.fetchone()
+            print(f"You have deleted doctor : {deleted_record}")
+            conn.commit()
+            self.nurseDetails(nurseTableName)  # by this we can see the remaining nurses in the table
+
+        except psycopg2.Error as error:
+            print(f"Failed to DELETE data in table:{nurseTableName} ,", error)
+
+        finally:
+            if conn:
+                conn.close()
+                cursor.close()
+                print("The Postgresql connection inside delete record is closed")
 
     def updateDoctor(self, docTableName, userId, colName, data):
         try:
@@ -231,8 +253,6 @@ class MyHospitalDB:
                 cursor.close()
                 print("The Postgresql connection inside Update record is closed")
 
-
-
     def showEnteredData(self, username, password):
         print(f"userName : {username}")
         print(f"password : {password}")
@@ -245,6 +265,7 @@ class MyHospitalDB:
         elif nurse == "nurseDet":
             nurseTableName = "nurse_details"
             self.nurseDetails(nurseTableName)
+
     def addDetails(self, doc="", nurse="", patient="",
                    others=""):  # given default arg so that i can send from where this fun is getting a single arg according to the doc or nurse or other. and below in this function bodu i can verify what arg got passed in this function.
         if doc == "doctor":
@@ -283,9 +304,11 @@ class MyHospitalDB:
             self.deleteDoc(docTableName, d)
 
         elif nurse == "nurse":
-            docTableName = "nurse_details"
+            nurseTableName = "nurse_details"
             print("Here are the Details of all Nurses: ")
-            self.nurseDetails(docTableName)
+            self.nurseDetails(nurseTableName)
+            nurseName = input("Enter the Nurse's name of which you want to remove : ")
+            self.deleteNurse(nurseTableName, nurseName)
 
     def updateDetails(self, doc="", nurse="", patient="", others=""):
         if doc == "doctors":
