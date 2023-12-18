@@ -253,6 +253,25 @@ class MyHospitalDB:
                 cursor.close()
                 print("The Postgresql connection inside Update record is closed")
 
+    def updateNurse(self, nurseTableName, userId, colName, data):
+        cursor, conn = getCursor()
+        try:
+            updateQuery = f""" UPDATE {nurseTableName} 
+                                SET {colName.lower()} = %s WHERE id = %s """
+            cursor.execute(updateQuery, (data, userId))
+            conn.commit()
+            count = cursor.rowcount # it will count total number of rows
+            print(f"******* {count} Record Updated successfully *******  ")
+
+        except psycopg2.Error as error:
+            print(f"Failed to UPDATE data in table:{nurseTableName} ,", error)
+        finally:
+            if conn:
+                conn.close()
+                cursor.close()
+                print("The Postgresql connection inside Update record is closed")
+
+
     def showEnteredData(self, username, password):
         print(f"userName : {username}")
         print(f"password : {password}")
@@ -313,19 +332,27 @@ class MyHospitalDB:
     def updateDetails(self, doc="", nurse="", patient="", others=""):
         if doc == "doctors":
             docTableName = "doctor_details"
-            print("All Doctor * BEFORE UPDATE * : ")
+            print("All Doctor *** BEFORE UPDATE *** : ")
             self.doctorDetails(docTableName)
-            # print(" and the column name and update value (except ID): ", end=" ")  # id and username both are unique so we can anyone.username seems more intuitive
+            # print(" and the column name and update value (except ID): ", end=" ")  # id and username both are
+            # unique so we can use anyone.username seems more intuitive
             userId = input("Enter the Doctor's ID of which you want to Update: ")
             colName = input("Enter the Column name that you want to update in : ")
             data = input("Enter the value that you want to update: ")
 
             self.updateDoctor(docTableName, userId, colName, data)
 
-            print("All Doctor * AFTER UPDATE * : ")
+            print("All Doctor *** AFTER UPDATE *** : ")
             self.doctorDetails(docTableName)
 
         elif nurse == "nurse":
-            docTableName = "nurse_details"
-            print("Here are the Details of all Nurses: ")
-            self.nurseDetails(docTableName)
+            nurseTableName = "nurse_details"
+            print("All Nurses *** BEFORE UPDATE *** : ")
+            self.nurseDetails(nurseTableName)
+            userId = input("Enter the Nurse's ID of which you want to Update: ")
+            colName = input("Enter the Column name that you want to update in : ")
+            data = input("Enter the value that you want to update: ")
+            self.updateNurse(nurseTableName, userId, colName, data)
+
+            print("All Nurse *** AFTER UPDATE *** : ")
+            self.nurseDetails(nurseTableName, )

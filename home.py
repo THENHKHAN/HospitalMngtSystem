@@ -84,10 +84,10 @@ class Home:
                                                  """)
                 b = int(input("Enter your choice please!! : "))
                 if b == 1:  # for doctors
-                    crudObj.updateDetails("doctors")
+                    crudObj.updateDetails(doc="doctors")
 
                 elif b == 2:  # for nurses
-                    crudObj.updateDetails("nurse")
+                    crudObj.updateDetails(nurse="nurse")
             # Make an exit
             if a == 5:
                 break
