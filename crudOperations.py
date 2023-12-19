@@ -114,6 +114,30 @@ class MyHospitalDB:
                 conn.close()
                 cursor.close()
                 print("The Postgresql connection inside Show nurse details is closed")
+    def patientDetails(self, patientTableName):
+        cursor, conn = getCursor()
+        try:
+            selectQuery = f"SELECT * from {patientTableName};"
+            cursor.execute(selectQuery)
+            allPatient = cursor.fetchall()
+            print("Here are the Patient details: ")
+            print("Total rows are:  ", len(allPatient))
+            # Get column names from cursor description
+            column_names = [col[0] for col in cursor.description]  # here we are getting cols name from DB dynamically
+            table = PrettyTable()
+            table.field_names = column_names  # making fields as table columns
+            for row in allPatient:
+                table.add_row(row)
+            # Print the formatted table
+            print(table)
+        except psycopg2.Error as error:
+            print("Failed to read data from table", error)
+
+        finally:
+            if conn:
+                conn.close()
+                cursor.close()
+                print("The Postgresql connection inside Show Patient details is closed")
 
     def addDoctor(self, docTableName, docCredList):
         # AllCOl: ['id', 'name', 'specialisation', 'age', 'address', 'contact', 'fee', 'monthly_salary']
@@ -181,6 +205,8 @@ class MyHospitalDB:
                 cursor.close()
                 print("The Postgresql connection is closed")
                 input("Press Enter key to continue!!")
+    def addPatient(self, patientTableName, patientCredsList) :
+
 
     def deleteDoc(self, docTableName, userName):
         cursor, conn = getCursor()
@@ -285,6 +311,10 @@ class MyHospitalDB:
             nurseTableName = "nurse_details"
             self.nurseDetails(nurseTableName)
 
+        elif patient == "patient":
+            patientTableName = "patient_details"
+            self.patientDetails(patientTableName)
+
     def addDetails(self, doc="", nurse="", patient="",
                    others=""):  # given default arg so that i can send from where this fun is getting a single arg according to the doc or nurse or other. and below in this function bodu i can verify what arg got passed in this function.
         if doc == "doctor":
@@ -311,6 +341,15 @@ class MyHospitalDB:
             nurseCredList = [name, age, addr, cont, mSalary]
             nurseTableName = "nurse_details"
             self.addNurse(nurseTableName, nurseCredList)
+
+        elif patient == "patient" :
+            name = input("Enter the patient's name:  ")
+            age = input("Enter the sex:  ")
+            addr = input("Enter the address:  ")
+            cont = input("Enter Contact Details:  ")
+            patientCredsList = [name, age, addr, cont]
+            patientTableName = "patient_details"
+            self.addPatient(patientTableName, patientCredsList)
 
     def deleteDetails(self, doc="", nurse="", patient="", others=""):
         if doc == "doctors":
