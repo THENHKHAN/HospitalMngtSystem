@@ -92,6 +92,21 @@ class Home:
             if a == 5:
                 break
 
+    def patient(self):
+        crudObj = MyHospitalDB()
+        print("""
+                    1. Show Patients Info
+                    2. Add New Patient
+                    3. Discharge Summary
+                    4. Exit
+                                           """)
+        b = int (input ("Please enter your choice: "))
+    #     show patient info
+        if b == 1 :
+            crudObj.showDetails(patient="patient")
+        elif b == 2 :
+            crudObj.addDetails(patient="patient")
+
     def userMenu(self):
         crudObj = MyHospitalDB()  # so that we don't have to make this object in each condition for calling its functions.
         print('''
@@ -127,17 +142,19 @@ class Home:
 
                                                                                """)
 
-                    a = int(input("ENTER YOUR CHOICE:"))
+                    a = int(input("ENTER YOUR CHOICE: "))
 
-                    if a == 1:
+                    if a == 1: # for Doctors and Nurses
                         self.administration()
 
-                    if a == 2:
-                        print("ttttttttttttttttttt")
+                    elif a == 2: # for patient
+                        self.patient()
 
-                    if a == 3:
+                    elif a == 3:
                         print("Thank you for your time!! :\U0001f643")
                         break
+                    else:
+                        print("Please enter the provided options!! ")
 
             else:  # if username or password is wrong
                 print(" Please try again !!")
