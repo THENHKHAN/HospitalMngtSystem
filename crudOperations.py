@@ -114,6 +114,7 @@ class MyHospitalDB:
                 conn.close()
                 cursor.close()
                 print("The Postgresql connection inside Show nurse details is closed")
+
     def patientDetails(self, patientTableName):
         cursor, conn = getCursor()
         try:
@@ -146,7 +147,7 @@ class MyHospitalDB:
              mSalary] = docCredList  # unpacking list of creds so that i can insert all in table
             cursor, conn = getCursor()
             query = f"SELECT * FROM {docTableName}"  # doing to get all the columns name of table
-            cursor.execute(query)
+            cursor.execute(query)  # it does not return anything
             docDet = cursor.fetchall()  # comes details into cursor
             column_names = [col[0] for col in
                             cursor.description]  # In order to work this, you have to execute above two line.
@@ -186,8 +187,6 @@ class MyHospitalDB:
             column_names = [col[0] for col in
                             cursor.description]  # getting this table(nurse_details) columns name by using list comprehension
             print(f"All Columns in {nurseTableName} : {column_names}")
-            print(column_names)
-            # exit(1)
             insertDetsQuery = f""" INSERT INTO {nurseTableName} ( {column_names[1]}, {column_names[2]}, {column_names[3]}, {column_names[4]}, {column_names[5]})
                                     VALUES ('{name}', '{age}', '{addr}', '{cont}', '{mSalary}')
                             """
@@ -205,8 +204,34 @@ class MyHospitalDB:
                 cursor.close()
                 print("The Postgresql connection is closed")
                 input("Press Enter key to continue!!")
-    def addPatient(self, patientTableName, patientCredsList) :
 
+    def addPatient(self, patientTableName, patientCredsList):
+        cursor, conn = getCursor()
+        try:
+            [name, sex, addr, cont] = patientCredsList
+            getAllCol = f"SELECT * FROM {patientTableName}"
+            cursor.execute(getAllCol)  # it does not return anything
+            cursor.fetchall()
+            column_names = [col[0] for col in cursor.description]
+            print(f"All Columns in {patientTableName} : {column_names}")
+
+            insertQuery = f""" INSERT INTO {patientTableName} ({column_names[1]}, {column_names[2]}, {column_names[3]}, {column_names[4]} )
+                                VALUES ( '{name}', '{sex}', '{addr}', '{cont}' )
+                         """
+            cursor.execute(insertQuery)
+            conn.commit()
+            print(f"Data INSERTED SUCCESSFULLY in  table: {patientTableName} ")
+            self.patientDetails(patientTableName)
+
+        except psycopg2.Error as error:
+            print(f"Failed to INSERT data in table: {patientTableName} ,", error)
+
+        finally:
+            if conn:
+                conn.close()
+                cursor.close()
+                print("The Postgresql connection is closed")
+                input("Press Enter key to continue!!")
 
     def deleteDoc(self, docTableName, userName):
         cursor, conn = getCursor()
@@ -286,7 +311,7 @@ class MyHospitalDB:
                                 SET {colName.lower()} = %s WHERE id = %s """
             cursor.execute(updateQuery, (data, userId))
             conn.commit()
-            count = cursor.rowcount # it will count total number of rows
+            count = cursor.rowcount  # it will count total number of rows
             print(f"******* {count} Record Updated successfully *******  ")
 
         except psycopg2.Error as error:
@@ -296,7 +321,6 @@ class MyHospitalDB:
                 conn.close()
                 cursor.close()
                 print("The Postgresql connection inside Update record is closed")
-
 
     def showEnteredData(self, username, password):
         print(f"userName : {username}")
@@ -342,12 +366,12 @@ class MyHospitalDB:
             nurseTableName = "nurse_details"
             self.addNurse(nurseTableName, nurseCredList)
 
-        elif patient == "patient" :
+        elif patient == "patient":
             name = input("Enter the patient's name:  ")
-            age = input("Enter the sex:  ")
+            sex = input("Enter the sex:  ")
             addr = input("Enter the address:  ")
             cont = input("Enter Contact Details:  ")
-            patientCredsList = [name, age, addr, cont]
+            patientCredsList = [name, sex, addr, cont]
             patientTableName = "patient_details"
             self.addPatient(patientTableName, patientCredsList)
 
