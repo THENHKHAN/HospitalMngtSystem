@@ -44,5 +44,41 @@ except Exception as error :
 cursor = conn.cursor()
 # Most importantly: ALWAYS make commit after executing query. Like this conn.commit()
 ```
+## Important for writing variable inside sql query string:
+Problem:
+```python
+ delQuery = f"DELETE FROM {patientTableName} WHERE name = {patientName}"
+                cursor.execute(delQuery)
+Failed to DELETE data in table: patient_details , column "rohan" does not exist
+LINE 1: DELETE FROM patient_details WHERE name = rohan
+
+Mine Question:
+                but this name is exist
+                 [(6, 'rohan', 'm', 'mm-445 , ffdf, sf mumbai', '113399')]
+ 
+```
+Solution:
+```python
+The issue here is related to SQL syntax. When you are using a variable in a SQL query, especially for string values, it should be enclosed in single quotes. In your case, you need to modify the DELETE query to properly handle the patientName variable.
+
+Here's the corrected code:
+
+delQuery = f"DELETE FROM {patientTableName} WHERE name = '{patientName}'"
+cursor.execute(delQuery)
+```
+Focus here **`'{patientName}'`** </br>
+
+##### Another Syntax:
+```python
+            query = f'''
+                        DELETE FROM {nurseTableName} WHERE name = %s ;
+                '''
+            cursor.execute(query, (nurseName,))
+```
+#####  WARNING:
+```commandline
+Always be cautious about SQL injection vulnerabilities when concatenating variables into SQL queries. If the variable comes from user input, consider using parameterized queries or proper escaping mechanisms to prevent potential security risks.
+
+```
 
 

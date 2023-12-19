@@ -283,6 +283,38 @@ class MyHospitalDB:
                 cursor.close()
                 print("The Postgresql connection inside delete record is closed")
 
+    def deletePatient(self, patientTableName, patientName):
+        cursor, conn = getCursor()
+        try:
+            findPatient = f"SELECT * FROM {patientTableName} WHERE name = %s ;"
+            cursor.execute(findPatient, (patientName, ))
+            record = cursor.fetchall()
+            print("So you want to discharge this patient: ", record)
+            bill = input("Has he paid all the bills? (y/n):")
+            if bill.lower() == "y":
+                delQuery = f"DELETE FROM {patientTableName} WHERE name = '{patientName}'" # always use single quote outside the {} like '{python_variable}'. When you try to enter columns value/python variable use single qoute with that.
+                '''         
+The issue here is related to SQL syntax. When you are using a variable in a SQL query, especially for string values, 
+it should be enclosed in single quotes. In your case, you need to modify the DELETE query to properly handle the patientName variable. So the CORRECT IS :  '{patientName}'
+                '''
+                cursor.execute(delQuery)
+                print(f"You have deleted doctor : {record}")
+                conn.commit()
+                print("Remaining Doctors are :", end=" ")
+                self.nurseDetails(patientTableName)  # by this we can see the remaining nurses in the table
+
+            else:
+                print("Bill not paid : Pay the bill please")
+
+        except psycopg2.Error as error:
+            print(f"Failed to DELETE data in table: {patientTableName} ,", error)
+
+        finally:
+            if conn:
+                conn.close()
+                cursor.close()
+                print("The Postgresql connection inside delete record is closed")
+
     def updateDoctor(self, docTableName, userId, colName, data):
         try:
             cursor, conn = getCursor()
@@ -382,8 +414,8 @@ class MyHospitalDB:
             self.doctorDetails(docTableName)
             print("Enter the Doctor's name of which you want to remove : ",
                   end=" ")  # id and username both are unique so we can anyone.username seems more intuitive
-            d = input()
-            self.deleteDoc(docTableName, d)
+            docName = input()
+            self.deleteDoc(docTableName, docName)
 
         elif nurse == "nurse":
             nurseTableName = "nurse_details"
@@ -391,6 +423,13 @@ class MyHospitalDB:
             self.nurseDetails(nurseTableName)
             nurseName = input("Enter the Nurse's name of which you want to remove : ")
             self.deleteNurse(nurseTableName, nurseName)
+
+        elif patient == "patient" :
+            patientTableName = "patient_details"
+            print("Here are the Details of all Patients: ")
+            self.patientDetails(patientTableName)
+            patientName = input("Enter the Patient's name of which you want to remove : ")
+            self.deletePatient(patientTableName, patientName)
 
     def updateDetails(self, doc="", nurse="", patient="", others=""):
         if doc == "doctors":
