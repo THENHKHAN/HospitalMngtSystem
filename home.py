@@ -104,8 +104,13 @@ class Home:
     #     show patient info
         if b == 1 :
             crudObj.showDetails(patient="patient")
+        #     add patient
         elif b == 2 :
             crudObj.addDetails(patient="patient")
+        # discharge/ delete patient info
+        elif b == 3 :
+            crudObj.deleteDetails(patient="patient")
+
 
     def userMenu(self):
         crudObj = MyHospitalDB()  # so that we don't have to make this object in each condition for calling its functions.
