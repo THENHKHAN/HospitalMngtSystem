@@ -59,7 +59,8 @@ Mine Question:
 ```
 Solution:
 ```python
-The issue here is related to SQL syntax. When you are using a variable in a SQL query, especially for string values, it should be enclosed in single quotes. In your case, you need to modify the DELETE query to properly handle the patientName variable.
+The issue here is related to SQL syntax. When you are using a variable in a SQL query, especially for string values, it should be enclosed in single quotes.
+In your case, you need to modify the DELETE query to properly handle the patientName variable.
 
 Here's the corrected code:
 
@@ -70,15 +71,15 @@ Focus here **`'{patientName}'`** </br>
 
 ##### Another Syntax:
 ```python
-            query = f'''
-                        DELETE FROM {nurseTableName} WHERE name = %s ;
-                '''
-            cursor.execute(query, (nurseName,))
+        query = f'''
+                    DELETE FROM {nurseTableName} WHERE name = %s ;
+            '''
+        cursor.execute(query, (nurseName,))
 ```
 #####  WARNING:
 ```commandline
-Always be cautious about SQL injection vulnerabilities when concatenating variables into SQL queries. If the variable comes from user input, consider using parameterized queries or proper escaping mechanisms to prevent potential security risks.
-
+Always be cautious about SQL injection vulnerabilities when concatenating variables into SQL queries. If the variable comes from user input,
+consider using parameterized queries or proper escaping mechanisms to prevent potential security risks.
 ```
 
 
